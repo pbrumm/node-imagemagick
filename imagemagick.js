@@ -112,11 +112,15 @@ function parseIdentify(input) {
     if (currentLine.length > 0) {
       indent = currentLine.search(/\S/);
       comps = currentLine.split(': ');
-      if (indent > prevIndent) indents.push(indent);
-      while (indent < prevIndent) {
-        indents.pop();
-        prop = props.pop();
-        prevIndent = indents[indents.length - 1];
+      // for histogram the indention is incorrect as it justifies it to the right instead of left
+      // Force numbers into the histogram
+      if(!comps[0].trim().toLowerCase().match(/[0-9]+/)) {
+        if (indent > prevIndent) indents.push(indent);
+        while (indent < prevIndent) {
+          indents.pop();
+          prop = props.pop();
+          prevIndent = indents[indents.length - 1];
+        }
       }
       if (comps.length < 2) {
         props.push(prop);
